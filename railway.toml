@@ -28,4 +28,4 @@ healthcheck_timeout = 30
 
 [[services.plugins]]
 name = "volume"
-mounth_path = "/var/lib/clickhouse"
+mount_path = "/var/lib/clickhouse"
