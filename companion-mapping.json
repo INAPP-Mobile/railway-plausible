@@ -1,0 +1,8 @@
+{
+  "postgres": {
+    "DATABASE_URL": "DATABASE_URL"
+  },
+  "clickhouse": {
+    "CLICKHOUSE_DATABASE_URL": "CLICKHOUSE_DATABASE_URL"
+  }
+}
