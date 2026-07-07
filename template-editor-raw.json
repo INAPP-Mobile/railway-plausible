@@ -1,26 +1,30 @@
 {
   "BASE_URL": {
-    "value": "",
-    "description": "Public URL of your Plausible instance (e.g., https://plausible.yourdomain.com). No trailing slash."
+    "value": "https://plausible.yourdomain.com",
+    "description": "Public URL Plausible instance (e.g., https://plausible.yourdomain.com). Required Plausible start."
   },
   "SECRET_KEY_BASE": {
     "value": "${{secret(64)}}",
-    "description": "64-byte random string for cookie signing and secrets. Auto-generated."
+    "description": "64-byte random string for cookie signing secrets. Auto-generated."
   },
   "DATABASE_URL": {
     "value": "${{Postgres.DATABASE_URL}}",
-    "description": "PostgreSQL connection string. Add a Railway Postgres service to auto-inject."
+    "description": "PostgreSQL connection string. Auto-injected by Railway Postgres plugin."
+  },
+  "PGDATA": {
+    "value": "/var/lib/postgresql/data",
+    "description": "PostgreSQL data directory. Must start with /var/lib/postgresql/data."
   },
   "CLICKHOUSE_DATABASE_URL": {
     "value": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/${{clickhouse.CLICKHOUSE_DB}}",
-    "description": "ClickHouse connection string. References companion ClickHouse service credentials. Default works with Railway's ClickHouse companion service named 'clickhouse'."
+    "description": "ClickHouse connection string. Auto-injected."
   },
   "DISABLE_REGISTRATION": {
     "value": "false",
-    "description": "Set to true to disable public registration after creating your admin account."
+    "description": "Set true disable public registration after creating admin account."
   },
   "ENABLE_EMAIL_VERIFICATION": {
     "value": "false",
-    "description": "Set to true to require email verification for new users."
+    "description": "Set true require email verification new users."
   }
 }
