@@ -5,7 +5,7 @@
     <strong>Privacy-friendly, open-source web analytics built for the modern web</strong>
   </p>
   <p align="center">
-    <a href="https://railway.app/template/plausible-ce">
+    <a href="https://railway.com/new/template/plausible-2">
       <img src="https://railway.app/button.svg" alt="Deploy on Railway" height="40"/>
     </a>
   </p>
@@ -67,7 +67,7 @@ All services are containerized and deploy with a single click.
 
 ### 1. Deploy to Railway
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/plausible-ce)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/plausible-2)
 
 Click the button above. Railway will:
 1. Create the Plausible CE service

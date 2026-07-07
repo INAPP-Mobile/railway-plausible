@@ -1,26 +1,26 @@
-[
-  {
+{
+  "BASE_URL": {
     "value": "",
     "description": "Public URL of your Plausible instance (e.g., https://plausible.yourdomain.com). No trailing slash."
   },
-  {
+  "SECRET_KEY_BASE": {
     "value": "${{secret(64)}}",
     "description": "64-byte random string for cookie signing and secrets. Auto-generated."
   },
-  {
+  "DATABASE_URL": {
     "value": "${{Postgres.DATABASE_URL}}",
     "description": "PostgreSQL connection string. Add a Railway Postgres service to auto-inject."
   },
-  {
+  "CLICKHOUSE_DATABASE_URL": {
     "value": "http://clickhouse:8123/plausible",
     "description": "ClickHouse connection string. Default works with Railway's ClickHouse add-on as a companion service named 'clickhouse'."
   },
-  {
+  "DISABLE_REGISTRATION": {
     "value": "false",
     "description": "Set to true to disable public registration after creating your admin account."
   },
-  {
+  "ENABLE_EMAIL_VERIFICATION": {
     "value": "false",
     "description": "Set to true to require email verification for new users."
   }
-]
+}
