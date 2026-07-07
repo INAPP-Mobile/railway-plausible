@@ -1,31 +1,31 @@
 # Railway Project Configuration
-# This template deploys Plausible Community Edition with a ClickHouse service
-# and requires a PostgreSQL database plugin.
+# template deploys Plausible Community Edition ClickHouse service
+# requires PostgreSQL database plugin.
 
 [project]
-name = "plausible"
+name "plausible"
 
 [[services]]
-id = "plausible"
-name = "Plausible CE"
-description = "Plausible Analytics Community Edition - privacy-first web analytics"
-builder = "DOCKERFILE"
-dockerfile_path = "Dockerfile"
-healthcheck_path = "/api/health"
-healthcheck_timeout = 60
+id "plausible"
+name "Plausible CE"
+description "Plausible Analytics Community Edition privacy-first web analytics"
+builder "DOCKERFILE"
+dockerfile_path "Dockerfile"
+healthcheck_path "/api/health"
+healthcheck_timeout 60
 
 [[services.plugins]]
-name = "postgresql"
+name "postgresql"
 
 [[services]]
-id = "clickhouse"
-name = "ClickHouse"
-description = "ClickHouse analytics database for Plausible"
-builder = "DOCKERFILE"
-dockerfile_path = "clickhouse/Dockerfile"
-healthcheck_path = "/ping"
-healthcheck_timeout = 30
+id "clickhouse"
+name "ClickHouse"
+description "ClickHouse analytics database Plausible"
+builder "DOCKERFILE"
+dockerfile_path "clickhouse/Dockerfile"
+healthcheck_path "/ping"
+healthcheck_timeout 30
 
 [[services.plugins]]
-name = "volume"
-mount_path = "/var/lib/clickhouse"
+name "volume"
+mount_path "/var/lib/clickhouse"

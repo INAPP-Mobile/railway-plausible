@@ -1,28 +1,13 @@
 {
   "BASE_URL": {
-    "defaultValue": "https://plausible.yourdomain.com",
-    "description": "Public URL Plausible instance (e.g., https://plausible.yourdomain.com). Required Plausible start.",
+    "defaultValue": "${{RAILWAY_PUBLIC_DOMAIN}}",
+    "description": "Public URL Plausible instance. Auto-set Railway public domain.",
     "isOptional": false
   },
   "SECRET_KEY_BASE": {
     "defaultValue": "${{secret(64)}}",
     "description": "64-byte random string cookie signing secrets. Auto-generated.",
     "isOptional": false
-  },
-  "DATABASE_URL": {
-    "defaultValue": "${{Postgres.DATABASE_URL}}",
-    "description": "PostgreSQL connection string. Auto-injected by Railway Postgres plugin.",
-    "isOptional": false
-  },
-  "PGDATA": {
-    "defaultValue": "/var/lib/postgresql/data",
-    "description": "PostgreSQL data directory. Must start with /var/lib/postgresql/data.",
-    "isOptional": true
-  },
-  "CLICKHOUSE_DATABASE_URL": {
-    "defaultValue": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/${{clickhouse.CLICKHOUSE_DB}}",
-    "description": "ClickHouse connection string. Auto-injected.",
-    "isOptional": true
   },
   "DISABLE_REGISTRATION": {
     "defaultValue": "false",
