@@ -1,0 +1,18 @@
+{
+  "CLICKHOUSE_DB": {
+    "value": "plausible",
+    "description": "Default database name for ClickHouse (default: plausible). Must match the CLICKHOUSE_DATABASE_URL in plausible-ce."
+  },
+  "CLICKHOUSE_USER": {
+    "value": "plausible",
+    "description": "ClickHouse user for network access. Required for plausible-ce to authenticate."
+  },
+  "CLICKHOUSE_PASSWORD": {
+    "value": "${{secret(24)}}",
+    "description": "ClickHouse password for the configured user. Auto-generated."
+  },
+  "PORT": {
+    "value": "8123",
+    "description": "ClickHouse HTTP port (default: 8123)."
+  }
+}

@@ -85,8 +85,7 @@ Set these **required** variables in Railway dashboard:
 | `SECRET_KEY_BASE` | 64-byte random string for encryption | `openssl rand -base64 48` |
 | `CLICKHOUSE_DATABASE_URL` | ClickHouse connection string | See networking section below |
 
-> **Network Tip:** ClickHouse runs as a Railway service. Use the internal Railway service URL format:
-> `http://clickhouse:8123/plausible`
+> **Network Tip:** ClickHouse runs as a Railway companion service with auto-generated credentials (`CLICKHOUSE_USER`, `CLICKHOUSE_PASSWORD`). The `CLICKHOUSE_DATABASE_URL` is automatically constructed using these credentials via Railway's variable references.
 
 ### 3. Access Your Instance
 
@@ -103,7 +102,7 @@ Once deployed, visit your `BASE_URL` and register the first user account.
 | `BASE_URL` | Public URL (no trailing slash), e.g. `https://plausible.yourdomain.com` |
 | `SECRET_KEY_BASE` | At least 64-byte random base64 string for cookie signing |
 | `DATABASE_URL` | PostgreSQL connection string (auto-populated by Railway plugin) |
-| `CLICKHOUSE_DATABASE_URL` | ClickHouse connection string (`http://clickhouse:8123/plausible`) |
+| `CLICKHOUSE_DATABASE_URL` | ClickHouse connection string (auto-constructed from companion ClickHouse service credentials) |
 
 ### Registration
 

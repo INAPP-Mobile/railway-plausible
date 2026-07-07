@@ -12,8 +12,8 @@
     "description": "PostgreSQL connection string. Add a Railway Postgres service to auto-inject."
   },
   "CLICKHOUSE_DATABASE_URL": {
-    "value": "http://clickhouse:8123/plausible",
-    "description": "ClickHouse connection string. Default works with Railway's ClickHouse add-on as a companion service named 'clickhouse'."
+    "value": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/${{clickhouse.CLICKHOUSE_DB}}",
+    "description": "ClickHouse connection string. References companion ClickHouse service credentials. Default works with Railway's ClickHouse companion service named 'clickhouse'."
   },
   "DISABLE_REGISTRATION": {
     "value": "false",

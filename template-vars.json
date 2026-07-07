@@ -15,8 +15,8 @@
     "isOptional": false
   },
   "CLICKHOUSE_DATABASE_URL": {
-    "defaultValue": "http://clickhouse:8123/plausible",
-    "description": "ClickHouse connection string. Default works with Railway's ClickHouse add-on as a companion service named 'clickhouse'.",
+    "defaultValue": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/${{clickhouse.CLICKHOUSE_DB}}",
+    "description": "ClickHouse connection string. References companion ClickHouse service credentials. Default works with Railway's ClickHouse companion service named 'clickhouse'.",
     "isOptional": true
   },
   "DISABLE_REGISTRATION": {

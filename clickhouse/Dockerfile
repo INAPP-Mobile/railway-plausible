@@ -10,7 +10,5 @@ COPY clickhouse/default-profile-low-resources-overrides.xml /etc/clickhouse-serv
 
 EXPOSE 8123 9000
 
-ENV CLICKHOUSE_SKIP_USER_SETUP=1
-
 HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
   CMD wget --no-verbose --tries=1 -O - http://127.0.0.1:8123/ping || exit 1
