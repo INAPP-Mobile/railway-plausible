@@ -10,5 +10,5 @@ EXPOSE 8000
 ENV PORT=8000
 
 
-# Base image entrypoint handles full lifecycle (run, createdb, migrate handled by upstream)
-CMD []
+# Base image handles full lifecycle, including DB setup
+CMD ["run"]
