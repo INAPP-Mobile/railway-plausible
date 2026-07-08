@@ -3,10 +3,6 @@
     "value": "${{RAILWAY_PUBLIC_DOMAIN}}",
     "description": "Public URL for Plausible"
   },
-  "DATABASE_URL": {
-    "value": "${{plausible-postgres.DATABASE_URL}}",
-    "description": "Postgres connection URL (auto-injected)"
-  },
   "SECRET_KEY_BASE": {
     "value": "${{secret(64)}}",
     "description": "Cookie signing secret (64-char random)"
@@ -16,8 +12,8 @@
     "description": "Set to true to disable public registration"
   },
   "CLICKHOUSE_DATABASE_URL": {
-    "value": "http://clickhouse:8123/plausible",
-    "description": "ClickHouse connection URL"
+    "value": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/plausible",
+    "description": "ClickHouse connection URL with companion service credentials"
   },
   "ENABLE_EMAIL_VERIFICATION": {
     "value": "false",

@@ -124,7 +124,7 @@ pl_update_r = graphql(update_svc, {"input": {
         "BASE_URL": {"value": "${{RAILWAY_PUBLIC_DOMAIN}}"},
         "SECRET_KEY_BASE": {"value": "${{secret(64)}}"},
         "DATABASE_URL": {"value": "${{Postgres.DATABASE_URL}}"},
-        "CLICKHOUSE_DATABASE_URL": {"value": "http://clickhouse:8123/plausible"},
+        "CLICKHOUSE_DATABASE_URL": {"value": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/plausible"},
         "DISABLE_REGISTRATION": {"value": "false"},
         "ENABLE_EMAIL_VERIFICATION": {"value": "false"},
     }

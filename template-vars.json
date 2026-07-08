@@ -15,8 +15,8 @@
     "isOptional": false
   },
   "CLICKHOUSE_DATABASE_URL": {
-    "defaultValue": "http://clickhouse:8123/plausible",
-    "description": "ClickHouse connection URL (http://clickhouse:8123/plausible).",
+    "defaultValue": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/plausible",
+    "description": "ClickHouse connection URL with companion service credentials",
     "isOptional": false
   },
   "DISABLE_REGISTRATION": {

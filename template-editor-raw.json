@@ -12,8 +12,8 @@
     "description": "64-byte random string for cookie signing secrets. Auto-generated."
   },
   "CLICKHOUSE_DATABASE_URL": {
-    "value": "http://clickhouse:8123/plausible",
-    "description": "ClickHouse connection URL (http://clickhouse:8123/plausible)."
+    "value": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/plausible",
+    "description": "ClickHouse connection URL with companion service credentials"
   },
   "DISABLE_REGISTRATION": {
     "value": "false",
