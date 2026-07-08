@@ -1,18 +1,26 @@
 {
+  "DATABASE_URL": {
+    "value": "${{Postgres.DATABASE_URL}}",
+    "description": "PostgreSQL connection URL. Auto-provided by Railway Postgres plugin."
+  },
   "BASE_URL": {
     "value": "${{RAILWAY_PUBLIC_DOMAIN}}",
-    "description": "Public URL Plausible instance. Auto-set Railway public domain."
+    "description": "Public URL for Plausible instance. Auto-set from Railway public domain."
   },
   "SECRET_KEY_BASE": {
     "value": "${{secret(64)}}",
-    "description": "64-byte random string cookie signing secrets. Auto-generated."
+    "description": "64-byte random string for cookie signing secrets. Auto-generated."
+  },
+  "CLICKHOUSE_DATABASE_URL": {
+    "value": "http://clickhouse:8123/plausible",
+    "description": "ClickHouse connection URL (http://clickhouse:8123/plausible)."
   },
   "DISABLE_REGISTRATION": {
     "value": "false",
-    "description": "Set true disable public registration after creating admin account."
+    "description": "Set to true to disable public registration after creating admin account."
   },
   "ENABLE_EMAIL_VERIFICATION": {
     "value": "false",
-    "description": "Set true require email verification new users."
+    "description": "Set to true to require email verification for new users."
   }
 }
