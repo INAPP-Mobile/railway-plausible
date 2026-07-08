@@ -33,9 +33,10 @@ EOF
 fi
 
 # Start clickhouse-server in background (now on port 8124)
-echo "Starting clickhouse-server (port 8124)..."
-clickhouse-server --config-file=/etc/clickhouse-server/config.xml > /dev/null 2>&1 &
+echo "Starting clickhouse-server (port 8124)..." > /tmp/startup.log
+clickhouse-server --config-file=/etc/clickhouse-server/config.xml >> /tmp/clickhouse.log 2>&1 &
 CH_PID=$!
+echo "Started clickhouse PID=$CH_PID" >> /tmp/startup.log
 
 # Wait for clickhouse /ping to respond
 echo "Waiting for clickhouse to be ready..."
@@ -55,9 +56,10 @@ if [ "$CLICKHOUSE_DB" != "default" ]; then
 fi
 
 # Start healthcat proxy on port 8123
-echo "Starting healthcat proxy (port 8123)..."
-python3 /healthcat.py > /dev/null 2>&1 &
+echo "Starting healthcat proxy (port 8123)..." >> /tmp/startup.log
+python3 /healthcat.py >> /tmp/healthcat.log 2>&1 &
 HC_PID=$!
+echo "Started healthcat PID=$HC_PID" >> /tmp/startup.log
 
 echo "All services started"
 # Keep container alive and wait for both processes
