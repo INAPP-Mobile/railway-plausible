@@ -96,7 +96,7 @@ pl_r = graphql(create_pg, {"input": {
     "environmentId": env_id,
     "name": "Plausible CE",
     "source": {"repo": "https://github.com/INAPP-Mobile/railway-plausible"},
-    "icon": "https://simpleicons.org/icons/plausibleanalytics.svg"
+    "icon": "https://raw.githubusercontent.com/INAPP-Mobile/railway-plausible/main/template-icon.svg"
 }})
 if pl_r.get("error"):
     print("ERROR creating plausible:", json.dumps(pl_r, indent=2))
