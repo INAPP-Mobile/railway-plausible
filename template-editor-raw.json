@@ -4,7 +4,7 @@
     "description": "PostgreSQL connection URL. Auto-provided by Railway Postgres plugin."
   },
   "BASE_URL": {
-    "value": "${{RAILWAY_PUBLIC_DOMAIN}}",
+    "value": "https://${{RAILWAY_PUBLIC_DOMAIN}}",
     "description": "Public URL for Plausible instance. Auto-set from Railway public domain."
   },
   "SECRET_KEY_BASE": {
