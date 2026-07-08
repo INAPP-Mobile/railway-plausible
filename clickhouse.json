@@ -1,0 +1,14 @@
+{
+  "CLICKHOUSE_DB": {
+    "value": "plausible",
+    "description": "ClickHouse database name"
+  },
+  "CLICKHOUSE_USER": {
+    "value": "plausible",
+    "description": "ClickHouse user"
+  },
+  "CLICKHOUSE_PASSWORD": {
+    "value": "${{secret(24)}}",
+    "description": "ClickHouse password (24-char random)"
+  }
+}

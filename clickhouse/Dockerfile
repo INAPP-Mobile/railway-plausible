@@ -10,5 +10,5 @@ COPY default-profile-low-resources-overrides.xml /etc/clickhouse-server/users.d/
 
 EXPOSE 8123 9000
 
-HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=3 \
-  CMD wget --no-verbose --tries=1 -O - http://127.0.0.1:8123/ping || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --start-period=60s --retries=10 \
+  CMD wget --no-verbose --tries=1 -O - http://127.0.0.1:8123/ping 2>/dev/null || exit 1
