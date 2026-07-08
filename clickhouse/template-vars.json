@@ -10,7 +10,7 @@
     "isOptional": false
   },
   "CLICKHOUSE_PASSWORD": {
-    "defaultValue": "clickhouse_plausible_pw_2026",
+    "defaultValue": "${{secret(24)}}",
     "description": "ClickHouse password configured user.",
     "isOptional": false
   },

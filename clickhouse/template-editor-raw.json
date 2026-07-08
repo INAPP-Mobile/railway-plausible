@@ -8,7 +8,7 @@
     "description": "ClickHouse user network access."
   },
   "CLICKHOUSE_PASSWORD": {
-    "value": "clickhouse_plausible_pw_2026",
+    "value": "${{secret(24)}}",
     "description": "ClickHouse password configured user."
   },
   "PORT": {
