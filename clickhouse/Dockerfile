@@ -2,6 +2,7 @@ FROM docker.io/clickhouse/clickhouse-server:24.12-alpine
 
 # ClickHouse server optimized for low-resource environments
 # Config files from Plausible CE project
+# v3 - with healthcat proxy
 COPY logs.xml /etc/clickhouse-server/config.d/logs.xml
 COPY ipv4-only.xml /etc/clickhouse-server/config.d/ipv4-only.xml
 COPY low-resources.xml /etc/clickhouse-server/config.d/low-resources.xml
