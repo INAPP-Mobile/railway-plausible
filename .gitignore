@@ -2,3 +2,7 @@
 .env
 .env.local
 tmp/
+
+# Railway deploy artifacts (local-only)
+.railway/
+.railway-config-pull-*

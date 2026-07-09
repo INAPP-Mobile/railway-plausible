@@ -123,8 +123,8 @@ pl_update_r = graphql(update_svc, {"input": {
     "variables": {
         "BASE_URL": {"value": "https://${{RAILWAY_PUBLIC_DOMAIN}}"},
         "SECRET_KEY_BASE": {"value": "${{secret(64)}}"},
-        "DATABASE_URL": {"value": "${{Postgres.DATABASE_URL}}"},
-        "CLICKHOUSE_DATABASE_URL": {"value": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/plausible"},
+        "DATABASE_URL": {"value": "postgresql://postgres:postgres@postgres.railway.internal:5432/railway"},
+        "CLICKHOUSE_DATABASE_URL": {"value": "http://plausible:plausible2026@clickhouse.railway.internal:8123/plausible"},
         "DISABLE_REGISTRATION": {"value": "false"},
         "ENABLE_EMAIL_VERIFICATION": {"value": "false"},
     }
@@ -147,7 +147,7 @@ ch_update_r = graphql(update_svc, {"input": {
     "variables": {
         "CLICKHOUSE_DB": {"value": "plausible", "description": "Default database name"},
         "CLICKHOUSE_USER": {"value": "plausible", "description": "ClickHouse user"},
-        "CLICKHOUSE_PASSWORD": {"value": "${{secret(24)}}", "description": "ClickHouse password"},
+        "CLICKHOUSE_PASSWORD": {"value": "plausible2026", "description": "ClickHouse password. Literal value so marketplace deploys get a working auth string out-of-the-box; update both ClickHouse tile and Plausible CE CLICKHOUSE_DATABASE_URL if customizing."},
     }
 }})
 if ch_update_r.get("error"):

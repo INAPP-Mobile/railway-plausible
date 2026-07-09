@@ -1,8 +1,32 @@
 {
   "slug": "plausible",
-  "template_code": "plausible-2",
-  "url": "https://railway.com/deploy/plausible-2",
+  "template_code": "uqmLjb",
+  "template_id": "55ebc0a2-2378-45c5-a396-3b748046242f",
+  "url": "https://railway.com/deploy/uqmLjb",
+  "editor_url": "https://railway.com/workspace/templates/55ebc0a2-2378-45c5-a396-3b748046242f",
   "category": "Analytics",
-  "template_id": "1058d0cd-fdab-4346-beb7-a851c9f87da3",
-  "published_at": "2026-07-07T09:00:00.000000"
+  "status": "UNPUBLISHED",
+  "previous": {
+    "template_code": "plausible-2",
+    "template_id": "1058d0cd-fdab-4346-beb7-a851c9f87da3",
+    "published_at": "2026-07-07T09:00:00.000000"
+  },
+  "rebuild_in_progress": {
+    "started_at": "2026-07-08",
+    "reason": "Replace postgres-ssl:18 plugin (crashed initdb on lost+found inside PGDATA — verified on lavish-beauty 2026-07-08) with sibling postgres:16-alpine service using parent-mount geometry. View lost+found rationale at .agents/skills/railway-deployment/references/plausible-ce-and-postgres-docker-patterns.md § \"Lost+Found Gotcha — Empirically Verified 2026-07-08\".",
+    "architecture": "3 sibling services (Plausible CE + ClickHouse + Postgres), all with own Dockerfiles; no Railway-managed plugins",
+    "next_actions": [
+      "Delete f0NGX9 draft (cannot be updated in-place)",
+      "Build `plausible-test-sibling` project with the 3 sibling services (see dashboard-paste.md section 5)",
+      "Run `railway templates create --project plausible-test-sibling` to re-create a fresh draft",
+      "Inspect template serializedConfig for volumeMounts on the postgres service (per dashboard-paste.md section 5 verification step 7)",
+      "Smoke-test marketplace-style deploy from ephemeral env (dashboard-paste.md section 6)",
+      "Only after smoke-test passes: `railway templates publish <new-code>`"
+    ],
+    "blockers": [
+      "AGENTS.md rule 3: NOT auto-publish until issues fully fixed",
+      "Sibling-service parent-mount geometry NOT yet empirically verified end-to-end (skill reference says it should work, but actual deploy test pending)"
+    ]
+  },
+  "created_at": "2026-07-08"
 }

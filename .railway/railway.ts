@@ -18,10 +18,10 @@ export default defineRailway(() => {
   const plausible = service("plausible", {
     source: github("INAPP-Mobile/railway-plausible", { branch: "main" }),
     healthcheck: "/api/health",
-    healthcheckTimeout: 60,
+    healthcheckTimeout: 300,
     env: {
       DATABASE_URL: db.env.DATABASE_URL,
-      CLICKHOUSE_DATABASE_URL: "http://clickhouse:8123/default",
+      CLICKHOUSE_DATABASE_URL: "http://clickhouse:8123/plausible",
     },
   });
 
@@ -30,8 +30,6 @@ export default defineRailway(() => {
       branch: "main",
       rootDirectory: "clickhouse",
     }),
-    healthcheck: "/ping",
-    healthcheckTimeout: 30,
     volumeMounts: {
       "/var/lib/clickhouse": chData,
     },

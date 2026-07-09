@@ -1,7 +1,7 @@
 {
   "DATABASE_URL": {
-    "defaultValue": "${{Postgres.DATABASE_URL}}",
-    "description": "PostgreSQL connection URL. Auto-provided by Railway Postgres plugin.",
+    "defaultValue": "postgresql://postgres:postgres@postgres.railway.internal:5432/plausible",
+    "description": "PostgreSQL connection URL. Points to the sibling 'postgres' service (postgres:16-alpine, NOT the postgres-ssl:18 plugin — see postgres/.env.example for the lost+found parent-mount geometry). Literal credentials match the defaults defined in postgres/template-vars.json so marketplace first-time deploys authenticate out of the box.",
     "isOptional": false
   },
   "BASE_URL": {
@@ -15,7 +15,7 @@
     "isOptional": false
   },
   "CLICKHOUSE_DATABASE_URL": {
-    "defaultValue": "http://${{clickhouse.CLICKHOUSE_USER}}:${{clickhouse.CLICKHOUSE_PASSWORD}}@clickhouse:8123/plausible",
+    "defaultValue": "http://plausible:plausible2026@clickhouse.railway.internal:8123/plausible",
     "description": "ClickHouse connection URL with companion service credentials",
     "isOptional": false
   },

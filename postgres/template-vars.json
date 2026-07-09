@@ -1,0 +1,22 @@
+{
+  "POSTGRES_USER": {
+    "defaultValue": "postgres",
+    "description": "Postgres superuser name. Used both for the running DB and as the credential prefix in Plausible CE's DATABASE_URL.",
+    "isOptional": false
+  },
+  "POSTGRES_PASSWORD": {
+    "defaultValue": "postgres",
+    "description": "Postgres password. Default literal 'postgres' chosen so marketplace first-time deploys authenticate against Plausible CE's literal DATABASE_URL out of the box. Rotate this in the dashboard AND update Plausible CE's DATABASE_URL to match before going to production.",
+    "isOptional": false
+  },
+  "POSTGRES_DB": {
+    "defaultValue": "plausible",
+    "description": "Initial database created on first boot. MUST match the database name in Plausible CE's DATABASE_URL (path component: /plausible).",
+    "isOptional": false
+  },
+  "PGDATA": {
+    "defaultValue": "/var/lib/postgresql/data",
+    "description": "Postgres data directory inside the mounted volume. MUST be a subpath of the volume mount path /var/lib/postgresql — this geometry places the volume's lost+found/ at /var/lib/postgresql/lost+found (outside PGDATA), so initdb sees an empty directory and proceeds. DO NOT change this without also changing the volume mount path.",
+    "isOptional": false
+  }
+}

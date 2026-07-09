@@ -1,4 +1,0 @@
-<clickhouse>
-    <!-- Listen on all interfaces, including Railway's private network -->
-    <listen_host>::</listen_host>
-</clickhouse>

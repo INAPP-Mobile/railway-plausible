@@ -10,8 +10,8 @@
     "isOptional": false
   },
   "CLICKHOUSE_PASSWORD": {
-    "defaultValue": "${{secret(24)}}",
-    "description": "ClickHouse password (24-char random)",
+    "defaultValue": "plausible2026",
+    "description": "ClickHouse password. Default literal 'plausible2026' chosen for marketplace-safe deploys. Update Plausible CE service's CLICKHOUSE_DATABASE_URL to match if you change this.",
     "isOptional": false
   }
 }

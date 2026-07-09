@@ -1,5 +1,12 @@
 {
+  "postgres": {
+    "PRIVATE_DOMAIN": "postgres.railway.internal",
+    "POSTGRES_USER": "POSTGRES_USER",
+    "POSTGRES_PASSWORD": "POSTGRES_PASSWORD",
+    "POSTGRES_DB": "POSTGRES_DB"
+  },
   "clickhouse": {
+    "PRIVATE_DOMAIN": "clickhouse.railway.internal",
     "CLICKHOUSE_USER": "CLICKHOUSE_USER",
     "CLICKHOUSE_PASSWORD": "CLICKHOUSE_PASSWORD",
     "CLICKHOUSE_DB": "CLICKHOUSE_DB"

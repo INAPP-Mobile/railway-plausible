@@ -1,145 +1,103 @@
 <div align="center">
   <img src="template-icon.svg" width="200" alt="Plausible CE Logo"/>
   <h1 align="center">Plausible Community Edition</h1>
+  <p align="center"><strong>Privacy-friendly, open-source web analytics for the modern web</strong></p>
   <p align="center">
-    <strong>Privacy-friendly, open-source web analytics built for the modern web</strong>
+    <a href="https://railway.com/new/template/plausible-1"><img src="https://railway.app/button.svg" alt="Deploy on Railway" height="40"/></a>
   </p>
-  <p align="center">
-    <a href="https://railway.com/new/template/plausible-1">
-      <img src="https://railway.app/button.svg" alt="Deploy on Railway" height="40"/>
-    </a>
-  </p>
-  <br>
+  <br/>
 </div>
 
 # Deploy and Host
 
-Deploy **Plausible Community Edition** on Railway in minutes. Plausible is a lightweight, open-source web analytics platform that doesn't use cookies and is fully compliant with GDPR, CCPA, and PECR. This template sets up Plausible CE with ClickHouse for high-performance analytics storage and PostgreSQL for metadata.
+**Plausible Community Edition** on Railway. Lightweight, open-source web analytics with no cookies, GDPR/CCPA/PECR compliant out of the box. This template deploys three sibling services so every marketplace deploy boots into a working state with no manual env-var hunting.
 
-## About Hosting
+## About Plausible
 
-Plausible CE is the self-hosted version of [Plausible Analytics](https://plausible.io), a privacy-first alternative to Google Analytics. Unlike traditional analytics tools, Plausible:
+- **No cookies required** — no consent banners
+- **Lightweight script** — < 1 KB
+- **ClickHouse-powered** — handles millions of page views
+- **27.4K+ GitHub stars** — battle-tested at scale
 
-- **No cookies required** — No cookie consent banners needed
-- **GDPR/CCPA compliant** out of the box
-- **Lightweight script** — < 1KB, loads instantly
-- **ClickHouse-powered** — Handles millions of page views
-- **27.4K+ GitHub stars** — Battle-tested by thousands
+## Services Deployed
 
-This Railway template deploys three components:
+| Service | Image | Volume Mount | Notes |
+|---------|-------|--------------|-------|
+| **Plausible CE** | `ghcr.io/plausible/community-edition:v3.2.1` | — | Elixir/Phoenix app on port 8000 |
+| **ClickHouse** | `clickhouse/clickhouse-server:24.12-alpine` | `/var/lib/clickhouse` | Analytics event store |
+| **PostgreSQL** | `postgres:16-alpine` (upstream) | `/var/lib/postgresql` (parent) | Metadata + users |
 
-| Component | Purpose | Image |
-|-----------|---------|-------|
-| **Plausible CE** | Web analytics application | `ghcr.io/plausible/community-edition:v3.2.1` |
-| **ClickHouse** | Column-oriented analytics database | `clickhouse/clickhouse-server:24.12-alpine` |
-| **PostgreSQL** | Metadata and user data storage | Railway plugin |
+> **Why upstream `postgres:16-alpine` instead of the Railway `postgres-ssl:18` plugin?** The plugin forces PGDATA to match the volume mount path exactly. With the Railway volume mount default of `/var/lib/postgresql/data`, the volume's ext4 `lost+found/` directory ends up *inside* PGDATA — and `initdb` crashes with `directory exists but is not empty`. The sibling-service fix mounts the volume at the **parent** path `/var/lib/postgresql` with `PGDATA=/var/lib/postgresql/data`, so `lost+found/` lives at the volume root, outside PGDATA. See `postgres/.env.example` for the full rationale, or `.agents/skills/railway-deployment/references/plausible-ce-and-postgres-docker-patterns.md` § "Lost+Found Gotcha — Empirically Verified 2026-07-08".
 
 ## Why Deploy
 
-- **Eliminate Google Analytics** — Own your analytics data completely
-- **Privacy by default** — No tracking cookies, no personal data collection
-- **Lightweight performance** — Tracking script is ~45KB gzipped
-- **Infinite scalability** — ClickHouse handles billions of events
-- **Real-time dashboards** — See visitor data as it comes in
-- **Zero-config SEO** — Built-in sitemaps, canonical URLs, Open Graph
+- **Own your analytics** — eliminate Google Analytics
+- **Privacy by default** — no tracking cookies, no fingerprinting
+- **Real-time dashboards** — see visitors as they arrive
+- **GDPR/CCPA compliant** out of the box
 
 ## Common Use Cases
 
-- **SaaS Products** — Track feature usage and user behavior without third-party scripts
-- **Content Websites** — Monitor traffic, top pages, and referral sources
-- **E-commerce** — Analyze conversion funnels and traffic sources
-- **Personal Blogs** — Simple, privacy-respecting visitor analytics
-- **Enterprise Intranets** — Host behind your firewall for internal analytics
-
-## Dependencies for Plausible
-
-### Deployment Dependencies
-
-- **Railway Account** — Sign up at [railway.app](https://railway.app)
-- **PostgreSQL Plugin** — Added automatically via Railway's plugin system
-- **Custom Domain** (recommended) — For production deployments
-
-All services are containerized and deploy with a single click.
-
----
+SaaS analytics (no third-party scripts), content websites (monitor traffic + referrals), e-commerce conversion analytics, personal blogs, or behind-the-firewall internal analytics.
 
 ## Quick Start
 
-### 1. Deploy to Railway
+### 1. Deploy
 
 [![Deploy on Railway](https://railway.app/button.svg)](https://railway.com/new/template/plausible-1)
 
-Click the button above. Railway will:
-1. Create the Plausible CE service
-2. Create the ClickHouse service
-3. Add a PostgreSQL database plugin
-4. Wire internal networking between services
+Railway creates all three sibling services in one click and wires internal networking. Wait ~30-60 seconds for Postgres initdb (~30s) and Plausible CE DB migrations (~60s on first boot).
 
-### 2. Configure Environment Variables
+### 2. Configure environment variables (if any)
 
-Set these **required** variables in Railway dashboard:
+The template ships with literal defaults that work out of the box. Most users won't need to touch anything. The variables you *can* rotate (and must keep in sync between services):
 
-| Variable | Description | How to Get |
-|----------|-------------|------------|
-| `BASE_URL` | Public URL of your Plausible instance | `https://your-app.up.railway.app` |
-| `SECRET_KEY_BASE` | 64-byte random string for encryption | `openssl rand -base64 48` |
-| `CLICKHOUSE_DATABASE_URL` | ClickHouse connection string | See networking section below |
+- `DATABASE_URL` (Plausible CE) — credentials match the Postgres sibling tile defaults
+- `CLICKHOUSE_DATABASE_URL` (Plausible CE) — credentials match ClickHouse sibling tile defaults
+- `BASE_URL` (Plausible CE) — defaults to `https://${{RAILWAY_PUBLIC_DOMAIN}}` (auto)
+- `SECRET_KEY_BASE` (Plausible CE) — defaults to `${{secret(64)}}` (auto-generated)
 
-> **Network Tip:** ClickHouse runs as a Railway companion service with auto-generated credentials (`CLICKHOUSE_USER`, `CLICKHOUSE_PASSWORD`). The `CLICKHOUSE_DATABASE_URL` is automatically constructed using these credentials via Railway's variable references.
+If you rotate `POSTGRES_PASSWORD` or `CLICKHOUSE_PASSWORD` on their respective tiles, update the corresponding Plausible CE URL in the same change.
 
-### 3. Access Your Instance
+### 3. Register the first user
 
-Once deployed, visit your `BASE_URL` and register the first user account.
-
----
+Visit `BASE_URL` (e.g. `https://plausible-ce-production-XXXX.up.railway.app`) and create your admin account. Then set `DISABLE_REGISTRATION=true` if you don't want public signups.
 
 ## Environment Variables
 
-### Required
+### Plausible CE (root)
 
-| Variable | Description |
-|----------|-------------|
-| `BASE_URL` | Public URL (no trailing slash), e.g. `https://plausible.yourdomain.com` |
-| `SECRET_KEY_BASE` | At least 64-byte random base64 string for cookie signing |
-| `DATABASE_URL` | PostgreSQL connection string (auto-populated by Railway plugin) |
-| `CLICKHOUSE_DATABASE_URL` | ClickHouse connection string (auto-constructed from companion ClickHouse service credentials) |
+| Variable | Default | Notes |
+|----------|---------|-------|
+| `BASE_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` | Auto — protocol prefix required by Plausible |
+| `SECRET_KEY_BASE` | `${{secret(64)}}` | Auto — 64-char random |
+| `DATABASE_URL` | `postgresql://postgres:postgres@postgres.railway.internal:5432/plausible` | Cookie signing secret |
+| `CLICKHOUSE_DATABASE_URL` | `http://plausible:plausible2026@clickhouse.railway.internal:8123/plausible` | Must match ClickHouse tile creds |
+| `DISABLE_REGISTRATION` | `false` | Flip to `true` after admin signup |
+| `ENABLE_EMAIL_VERIFICATION` | `false` | Optional |
+| `TOTP_VAULT_KEY` | (unset) | Required for 2FA |
 
-### Registration
+### Postgres (`postgres/` sibling service)
 
-| Variable | Description |
-|----------|-------------|
-| `DISABLE_REGISTRATION` | Set to `true` to prevent new user signups after initial setup |
-| `ENABLE_EMAIL_VERIFICATION` | Set to `true` to require email verification |
-| `TOTP_VAULT_KEY` | Key for encrypting TOTP two-factor secrets |
+| Variable | Default | Notes |
+|----------|---------|-------|
+| `POSTGRES_USER` | `postgres` | Matches DATABASE_URL user portion |
+| `POSTGRES_PASSWORD` | `postgres` | Must match DATABASE_URL password part |
+| `POSTGRES_DB` | `plausible` | Initial DB; matches DATABASE_URL path component |
+| `PGDATA` | `/var/lib/postgresql/data` | Subpath of `/var/lib/postgresql` mount — sidesteps lost+found gotcha |
+| `MAX_CONNECTIONS`, `SHARED_BUFFERS` | (unset) | Optional tuning |
 
-### Email (SMTP)
+### ClickHouse (`clickhouse/` sibling service)
 
-| Variable | Description |
-|----------|-------------|
-| `MAILER_ADAPTER` | Email adapter: `Bamboo.SMTPAdapter` (SMTP), `Bamboo.PostmarkAdapter`, etc. |
-| `MAILER_EMAIL` | From email address for outgoing emails |
-| `MAILER_NAME` | From name for outgoing emails |
-| `SMTP_HOST_ADDR` | SMTP server address |
-| `SMTP_HOST_PORT` | SMTP server port |
-| `SMTP_USER_NAME` | SMTP username |
-| `SMTP_USER_PWD` | SMTP password |
-| `SMTP_HOST_SSL_ENABLED` | Set to `true` to enable SSL/TLS |
+| Variable | Default | Notes |
+|----------|---------|-------|
+| `CLICKHOUSE_USER` | `plausible` | Matches URL user portion |
+| `CLICKHOUSE_PASSWORD` | `plausible2026` | Matches URL password part |
+| `CLICKHOUSE_DB` | `plausible` | Matches URL path component |
 
-### Google Auth
+### Optional (SMTP, Google Auth, GeoIP)
 
-| Variable | Description |
-|----------|-------------|
-| `GOOGLE_CLIENT_ID` | Google OAuth client ID |
-| `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
-
-### IP Geolocation
-
-| Variable | Description |
-|----------|-------------|
-| `IP_GEOLOCATION_DB` | Geolocation database: `city` (MaxMind City) |
-| `MAXMIND_LICENSE_KEY` | MaxMind license key for GeoIP database downloads |
-
----
+SMTP, Google OAuth, and MaxMind GeoIP are unchanged from prior templates — see `.env.example` for the full list. Defaults auto-skip these unless you uncomment them.
 
 ## Architecture
 
@@ -149,63 +107,54 @@ Once deployed, visit your `BASE_URL` and register the first user account.
 │                                                              │
 │  ┌──────────────────┐      ┌──────────────────┐            │
 │  │   Plausible CE    │─────▶│    ClickHouse     │           │
-│  │   (Elixir/Phoenix)│      │   (Analytics DB)  │          │
-│  │   :8000           │      │   :8123/:9000     │           │
+│  │   :8000           │      │   :8123:9000      │          │
 │  └────────┬──────────┘      └──────────────────┘            │
-│           │                                                 │
-│           ▼                                                 │
-│  ┌──────────────────┐                                       │
-│  │   PostgreSQL      │                                       │
-│  │   (Railway Plugin)│                                       │
-│  └──────────────────┘                                       │
+│           ▼                                                  │
+│  ┌──────────────────┐                                        │
+│  │   PostgreSQL      │  Image: postgres:16-alpine (upstream)│
+│  │   (sibling)       │  Volume mount: /var/lib/postgresql   │
+│  │                   │  PGDATA: /var/lib/postgresql/data     │
+│  │                   │  → lost+found/ stays OUTSIDE PGDATA   │
+│  └──────────────────┘                                        │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-- **Plausible CE** — Main application server (Elixir/Phoenix)
-- **ClickHouse** — Columnar analytics database for storing events
-- **PostgreSQL** — Relational database for users, sites, and metadata
-
-All internal communication happens over Railway's private network.
-
----
+All three services communicate via Railway's private network (`postgres.railway.internal`, `clickhouse.railway.internal`).
 
 ## Troubleshooting
 
-### ClickHouse fails to start
+### Postgres crashes with `directory exists but is not empty`
 
-ClickHouse requires **SSE 4.2** or **NEON** CPU instruction support. Most modern CPUs support this. If using an older/ARM instance:
+Confirm the Volume widget on the Postgres tile is set to mount at `/var/lib/postgresql` (NOT `/var/lib/postgresql/data`). The latter traps `lost+found/` inside PGDATA. See `postgres/.env.example` for the geometry explanation.
 
-1. Check Railway's region for CPU compatibility
-2. Consider using an external ClickHouse Cloud service instead
+### Volume widget settings don't survive marketplace deploy
 
-### Connection refused to services
+Railway's UI widget for volumeMounts may not always serialize into the `serializedConfig.services.<id>.volumeMounts` block. If a fresh marketplace deploy lacks the postgres volume, verify in the template editor's root-level Raw JSON that the postgres service has `volumeMounts: { "/var/lib/postgresql": {...} }`. If it's missing, you can either (a) inject it manually in the root Raw JSON editor, or (b) switch to IaC (`.railway/railway.ts`) for durable volumeMounts encoding. Worst case, run `railway volume add --service <postgres-id> --mount-path /var/lib/postgresql` post-deploy.
 
-Services may need time to start. ClickHouse and PostgreSQL start in parallel:
-- ClickHouse: ~30 seconds startup time
-- PostgreSQL: ~10 seconds startup time
-- Plausible CE: waits for both before starting
+### Connection refused Postgres on first deploy
 
-### Registration is open
+Postgres initdb runs on first boot — allow ~30 seconds. Check `railway logs --service Postgres`.
 
-Anyone who knows your URL can register. After creating your account:
-1. Set `DISABLE_REGISTRATION=true` in Railway dashboard
-2. Restart the Plausible service
+### Plausible logs show ECONNREFUSED / cannot create schema_migrations
 
-### Health check fails
+Postgres is still initializing (wait + refresh), OR Plausible CE's `DATABASE_URL` doesn't match the Postgres tile defaults (verify both via `railway variables --service <name> --kv`).
 
-The health endpoint is at `/api/health`. Plausible CE takes 30-60 seconds to start on first deploy as it runs database migrations. This is normal.
+### Health endpoint returns 502
 
----
+First deploy takes 60-90 seconds while both Postgres (`initdb`) and Plausible CE (`db migrate` + Elixir release boot) initialize. If 502 persists past 2 minutes, check Postgres logs first — most failures cascade from there.
+
+### Registration stays open after admin signup
+
+Set `DISABLE_REGISTRATION=true` on the Plausible CE tile and redeploy.
 
 ## License
 
 Plausible CE is licensed under [AGPL-3.0](https://github.com/plausible/analytics/blob/master/LICENSE.md).
 
----
-
 ## Resources
 
-- [Plausible CE Wiki](https://github.com/plausible/community-edition/wiki)
 - [Plausible CE Repository](https://github.com/plausible/community-edition)
+- [Plausible CE Wiki](https://github.com/plausible/community-edition/wiki)
 - [Plausible Documentation](https://plausible.io/docs)
 - [Railway Documentation](https://docs.railway.app)
+- Lost+Found gotcha reference: `.agents/skills/railway-deployment/references/plausible-ce-and-postgres-docker-patterns.md` § "Lost+Found Gotcha — Empirically Verified 2026-07-08"
