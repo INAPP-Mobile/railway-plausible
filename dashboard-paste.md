@@ -147,6 +147,24 @@ railway service redeploy --service "$PLAUSIBLE_ID" --yes
 # 6. Create new template draft from the test project
 railway templates create --project plausible-test-sibling --json | tee /tmp/template-draft.json
 
+> ⚠️ **WARNING — UNPUBLISHED drafts skip auto-domain generation (verified 2026-07-08 on `zippy-elegance` deploy of draft `-Z5F9M`).**
+>
+> Deploying via `railway deploy --template <new-code> --new` from an UNPUBLISHED draft creates services but does **NOT** auto-generate `*.up.railway.app` subdomains. The deploy will succeed, but `BASE_URL` will resolve to literally `https://` (empty domain), `railway domain list` will show zero domains on the Plausible CE service, and Plausible CE will fail to boot (HTTP 502 on `/api/health`) because its public-URL requirement is unsatisfied.
+>
+> The dashboard click-to-deploy flow invokes the backend `serviceDomainCreate` mutation per service; programmatic `railway deploy --template` does not. This is undocumented behavior — the only fixes are:
+>
+> 1. **Publish the template** (`railway templates publish <new-code>` after section 6 smoke-test passes). Marketplace-published templates re-enable auto-domain generation, so deploys from the marketplace URL self-resolve `${{RAILWAY_PUBLIC_DOMAIN}}` without manual intervention.
+> 2. **For the publish-source test project only**, generate the domain manually:
+>    ```bash
+>    railway service link "<plausible-ce-service-id>" && railway domain
+>    DOMAIN=$(railway domain list --json | jq -r '.domains[0].domain // .[0].domain // empty')
+>    railway variables set "BASE_URL=https://${DOMAIN}"
+>    railway service redeploy --service "<plausible-ce-service-id>" --yes
+>    ```
+>    Brittle — does not propagate to users deploying from the marketplace URL.
+>
+> **Recommendation:** do not ship a marketplace-published template without verifying both paths. If smoke-test section 6 shows the deploy works WITHOUT manual domain steps, the template is truly marketplace-ready. If it still requires the manual CLI recipe (option 2), the template is not yet publishable.
+
 # 7. **CRITICAL VERIFICATION** — confirm volumeMounts serialized into template
 #    Skill ref caveat: UI widget volumeMounts MAY not propagate to marketplace deploys.
 #    If the volume widget does not serialize into the captured template's root-level
@@ -252,5 +270,6 @@ curl -s -o /dev/null -w "%{http_code}\n" "https://${domain}/api/health"
 - **Auth failure** on ClickHouse or Postgres: literal default passwords used in this paste (`postgres`/`postgres`, `plausible`/`plausible2026`). If customized, update both the credential tile AND the Plausible CE tile's corresponding URL.
 - **BASE_URL errors**: literal `https://${RAILWAY_PUBLIC_DOMAIN}` form. Plausible requires the `https://` prefix — do NOT drop it.
 - **Template still shows old service topology after re-create draft**: Railway has no mutation to update template service topology in place — must delete + re-create.
+- **Plausible CE service has no auto-generated `*.up.railway.app` domain** after deploying via `railway deploy --template`: the template is UNPUBLISHED. Programmatic deploy-from-draft skips the dashboard's `serviceDomainCreate` step. Fix: publish the template (recommended), or generate the domain manually via `railway service link "<plausible-ce-id>" && railway domain` (only works for the publish-source project; marketplace users still need the published template). Verified on `zippy-elegance` 2026-07-08 — see section 5 WARNING for details.
 
 File generated 2026-07-08 after Path B sibling-service refactor.
