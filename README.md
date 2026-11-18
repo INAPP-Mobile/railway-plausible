@@ -129,7 +129,7 @@ Confirm the Volume widget on the Postgres tile is set to mount at `/var/lib/post
 
 ### Volume widget settings don't survive marketplace deploy
 
-Railway's UI widget for volumeMounts may not always serialize into the `serializedConfig.services.<id>.volumeMounts` block. If a fresh marketplace deploy lacks the postgres volume, verify in the template editor's root-level Raw JSON that the postgres service has `volumeMounts: { "/var/lib/postgresql": {...} }`. If it's missing, you can either (a) inject it manually in the root Raw JSON editor, or (b) switch to IaC (`.railway/railway.ts`) for durable volumeMounts encoding. Worst case, run `railway volume add --service <postgres-id> --mount-path /var/lib/postgresql` post-deploy.
+Railway's UI widget for volumeMounts may not always serialize into the `serializedConfig.services.{id}.volumeMounts` block. If a fresh marketplace deploy lacks the postgres volume, verify in the template editor's root-level Raw JSON that the postgres service has `volumeMounts: { "/var/lib/postgresql": {...} }`. If it's missing, you can either (a) inject it manually in the root Raw JSON editor, or (b) switch to IaC (`.railway/railway.ts`) for durable volumeMounts encoding. Worst case, run `railway volume add --service {postgres-id} --mount-path /var/lib/postgresql` post-deploy.
 
 ### Connection refused Postgres on first deploy
 
@@ -137,7 +137,7 @@ Postgres initdb runs on first boot — allow ~30 seconds. Check `railway logs --
 
 ### Plausible logs show ECONNREFUSED / cannot create schema_migrations
 
-Postgres is still initializing (wait + refresh), OR Plausible CE's `DATABASE_URL` doesn't match the Postgres tile defaults (verify both via `railway variables --service <name> --kv`).
+Postgres is still initializing (wait + refresh), OR Plausible CE's `DATABASE_URL` doesn't match the Postgres tile defaults (verify both via `railway variables --service {name} --kv`).
 
 ### Health endpoint returns 502
 
